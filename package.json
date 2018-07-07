@@ -1,0 +1,35 @@
+{
+  "name": "pomodoro",
+  "version": "0.0.0",
+  "description": "pomodoro timer api",
+  "main": "build/app.js",
+  "dependencies": {
+    "date-fns": "^1.29.0",
+    "ejs": "^2.6.1",
+    "koa": "^2.5.1",
+    "koa-router": "^7.4.0"
+  },
+  "devDependencies": {
+    "@types/co-views": "^2.1.8",
+    "@types/date-fns": "^2.6.0",
+    "@types/koa": "^2.0.46",
+    "@types/koa-router": "^7.0.30",
+    "@types/node": "^10.5.1",
+    "nodemon": "^1.17.5",
+    "typescript": "^2.9.2"
+  },
+  "scripts": {
+    "test": "test",
+    "build": "rm -rfd build && tsc",
+    "build:watch": "rm -rfd build && tsc -w",
+    "prestart": "npm run build",
+    "start": "node build/app.js",
+    "start:server": "nodemon build/app.js"
+  },
+  "keywords": [
+    "pomodoro",
+    "api"
+  ],
+  "author": "Jordan Cole Hunt",
+  "license": "MIT"
+}
