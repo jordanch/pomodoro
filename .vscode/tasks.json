@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build watch",
+            "command": "npm",
+            "isBackground": true,
+            "args": [
+                "run",
+                "build:watch"
+            ]
+        },
+        {
+            "label": "Start app and watch for changes",
+            "command": "npm",
+            "isBackground": true,
+            "args": [
+                "run",
+                "start:watch"
+            ]
+        }
+    ]
+}
