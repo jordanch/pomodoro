@@ -24,7 +24,7 @@
     "build:watch": "rm -rfd build && tsc -w",
     "prestart": "npm run build",
     "start": "node build/app.js",
-    "start:server": "nodemon build/app.js"
+    "start:watch": "nodemon build/app.js"
   },
   "keywords": [
     "pomodoro",
