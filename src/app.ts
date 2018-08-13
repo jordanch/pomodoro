@@ -7,4 +7,7 @@ export const app = new Koa();
 app.use(PomodoroRoutes.routes());
 // app.use(Auth.routes()).use(PomodoroRoutes.routes());
 
-app.listen(3000);
+const PORT = 3000;
+
+console.log(`Listening on port ${PORT}`)
+app.listen(PORT);
