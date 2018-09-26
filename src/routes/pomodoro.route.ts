@@ -10,12 +10,14 @@ import {
 
 const router = new KoaRouter()
 
+// TODO: move response handling into controllers not routes.
+
 router
   /**
    * Start a Pomodoro timer.
    */
   .get("/start", async (ctx) => {
-    const response = await start()
+    const response = await start(ctx)
     if ((<IPomoStartCtrl200>response).status === 200) {
       ctx.status = response.status
       ctx.body = response.data

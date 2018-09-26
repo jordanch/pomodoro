@@ -1,6 +1,6 @@
 import { Pomodoro } from "../runtime";
 
-export interface ISessionCache {
+export interface IRuntimeCache {
   sessions: {
     byId: {
       [id: number]: Pomodoro;

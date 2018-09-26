@@ -1,7 +1,7 @@
 import diff from "date-fns/difference_in_milliseconds"
 
 export class Pomodoro {
-  running: boolean
+  public running: boolean
   public id: number
   public startedAt: Date
   public stoppedAt: Date | undefined
@@ -11,7 +11,7 @@ export class Pomodoro {
     this.running = true
   }
 
-  get elapsedMs() {
+  getElapsedMs() {
     return diff(new Date(), new Date(this.startedAt))
   }
 
