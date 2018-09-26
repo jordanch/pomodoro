@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "06875655-7c99-4034-a403-e1f24da8eef2",
+		"name": "Pomodoro API",
+		"description": "\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Start session",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/start",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"start"
+					]
+				},
+				"description": "Start pomodoro session.\n\nRes: pomodoro."
+			},
+			"response": []
+		},
+		{
+			"name": "Get state",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000/state?id=2",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"state"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				},
+				"description": "Get a pomodoro's state. "
+			},
+			"response": []
+		},
+		{
+			"name": "Stop",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/stop?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"stop"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Stop a pomodoro."
+			},
+			"response": []
+		}
+	]
+}
