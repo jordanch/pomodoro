@@ -26,8 +26,8 @@ router
   /**
    * Query Pomodoro state by id..
    */
-  .get("/state", (ctx) => {
-    const response = state(ctx)
+  .get("/state", async (ctx) => {
+    const response = await state(ctx)
 
     if (response.status === 200) {
       console.log("Serving 200 OK")
@@ -51,8 +51,8 @@ router
   /**
    * Stop a pomodoro by id.
    */
-  .get("/stop", (ctx) => {
-    const response = stop(ctx)
+  .get("/stop", async (ctx) => {
+    const response = await stop(ctx)
 
     if (response.status === 200) {
       console.log("Serving 200 OK")

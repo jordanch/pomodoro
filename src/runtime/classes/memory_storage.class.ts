@@ -1,7 +1,7 @@
-import { IRuntimeCache } from "../../models"
+import { IRuntimeCache, IStorage } from "../../models"
 import { Pomodoro } from "."
 
-export class MemoryDatabase {
+export class MemoryDatabase implements IStorage {
   private cache: IRuntimeCache
 
   constructor(cache: IRuntimeCache) {
@@ -9,20 +9,22 @@ export class MemoryDatabase {
   }
 
   // TODO: type return
-  addPomodoro(pomodoro: Pomodoro, id: number) {
+  addPomodoro(pomodoro: Pomodoro, id: number): Promise<number> {
     return new Promise((resolve, reject) => {
       try {
         this.cache.sessions.byId[id] = pomodoro
         this.cache.sessions.allIds.push(id)
-        resolve()
+        console.log(`Successfully added Pomodoro ID: ${id}`)
+        resolve(id)
       } catch (e) {
+        console.log(`Failed in adding Pomodoro ID: ${id}`)
         reject(e)
       }
     })
   }
 
   // TODO: type return
-  queryPomodoro(id: number) {
+  queryPomodoro(id: number): Promise<Pomodoro> {
     return new Promise((resolve, reject) => {
       try {
         const pomodoro = this.cache.sessions.byId[id]
@@ -34,7 +36,7 @@ export class MemoryDatabase {
   }
 
   // TODO: type return
-  updatePomodoro(pomodoro: Pomodoro, id: number) {
+  updatePomodoro(pomodoro: Pomodoro, id: number): Promise<number> {
     return new Promise((resolve, reject) => {
       try {
         this.cache.sessions.byId[id] = pomodoro
@@ -52,22 +54,19 @@ export class MemoryDatabase {
     return new Promise((resolve, reject) => {
       try {
         const allIds = this.cache.sessions.allIds.slice()
-        const [lastId] = allIds.sort().splice(-1)
-        console.log(`Last id ${lastId}, new pomodoro id ${nextId(lastId)}`)
+        const [lastId] = allIds.sort((a, b) => {
+          if (a < b) return -1
+          if (a > b) return 1
+          return 0
+        }).splice(-1)
+        const nextId = !lastId ? 1 : lastId + 1;
+        console.log(`Last id ${lastId}, new pomodoro id ${nextId}`)
 
-        resolve(nextId(lastId))
+        resolve(nextId)
       } catch (e) {
         reject(e)
       }
 
     })
-
-    function nextId(lastId: undefined | number): number {
-      if (!lastId) {
-        return 1
-      }
-
-      return lastId + 1
-    }
   }
 }

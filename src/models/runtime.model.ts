@@ -8,3 +8,10 @@ export interface IRuntimeCache {
     allIds: number[];
   };
 }
+
+export interface IStorage {
+  addPomodoro(pomodoro: Pomodoro, id: number): Promise<number>,
+  queryPomodoro(id: number): Promise<Pomodoro>,
+  updatePomodoro(pomodoro: Pomodoro, id: number): Promise<number>,
+  getNextId(): Promise<number | Error>
+}

@@ -1,7 +1,7 @@
 export interface IStateRequest {
-  id: number
+  id: string
 }
 
 export interface IStopRequest {
-  id: number
+  id: string
 }

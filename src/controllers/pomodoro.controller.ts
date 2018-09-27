@@ -5,7 +5,8 @@ import {
   IPomoStateCtrl40x,
   IStopRequest,
   IPomoStopCtrl40x,
-  IPomoStopCtrl200
+  IPomoStopCtrl200,
+  IStorage
 } from "../models"
 import KoaRouter from "koa-router"
 import { IStateRequest } from "../models"
@@ -17,7 +18,7 @@ export async function start(ctx: KoaRouter.IRouterContext) {
   // TODO: wrap in try catch and handle success and error.
   // @ts-ignore
   const db = ctx.storage;
-  const id = await db.getNextId(cache)
+  const id = await db.getNextId()
   const pomodoro = new Pomodoro(id)
   await db.addPomodoro(pomodoro, id)
 
@@ -27,11 +28,16 @@ export async function start(ctx: KoaRouter.IRouterContext) {
 /**
  * Get the state of a pomodoro by id.
  */
-export function state(ctx: KoaRouter.IRouterContext) {
-  const { id } = ctx.query as IStateRequest
+export async function state(ctx: KoaRouter.IRouterContext) {
+  const { id: idString } = ctx.query as IStateRequest
+  const id = parseInt(idString, 10)
+  // TODO: once context is interfaced, remove as IStorage
+  let db: IStorage;
+  // @ts-ignore
+  db = ctx.storage;
 
-  // no id in request
-  if (!id) {
+  // no id in request or id is number stringNum
+  if (isNaN(id)) {
     console.log("No id present on request")
     return {
       status: 400,
@@ -39,13 +45,12 @@ export function state(ctx: KoaRouter.IRouterContext) {
     } as IPomoStateCtrl40x
   }
 
-  const pomodoro = cache.sessions.byId[id]
+  const pomodoro = await db.queryPomodoro(id)
 
   // found using id
   if (pomodoro) {
-    console.log(`Getting state of pomodoro id ${id}`)
     const minutesElapsed = Math.floor(pomodoro.getElapsedMs() / 100000)
-
+    console.log(`Responding with state of pomodoro id ${id}`)
     return {
       status: 200,
       data: {
@@ -58,20 +63,25 @@ export function state(ctx: KoaRouter.IRouterContext) {
   }
 
   // not found using id
-  console.log("Could not find pomodoro by id.")
+  console.log("Failed in finding pomodoro by id.")
   return { status: 404, data: `Could not find id ${id}` } as IPomoStateCtrl40x
 }
 
 /**
  * Stop pomodoro timer.
  */
-export function stop(
+export async function stop(
   ctx: KoaRouter.IRouterContext
-): IPomoStopCtrl200 | IPomoStopCtrl40x {
-  const { id } = ctx.query as IStopRequest
+  ): Promise<IPomoStopCtrl200 | IPomoStopCtrl40x> {
+    const { id: idString } = ctx.query as IStopRequest
+    const id = parseInt(idString)
+    // TODO: once context is interfaced, remove as IStorage
+    let db: IStorage;
+    // @ts-ignore
+    db = ctx.storage;
 
-  // no id in request
-  if (!id) {
+    // no id in request
+    if (isNaN(id)) {
     console.log("No id present on request")
     return {
       status: 400,
@@ -79,13 +89,14 @@ export function stop(
     } as IPomoStopCtrl40x
   }
 
-  const pomodoro = cache.sessions.byId[id]
+  const pomodoro = await db.queryPomodoro(id)
 
   // found using id
   if (pomodoro) {
     console.log(`Stopping pomodoro id ${id}`)
 
     pomodoro.stop()
+    await db.updatePomodoro(pomodoro, id)
 
     return {
       status: 200,
