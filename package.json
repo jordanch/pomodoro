@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test": "test",
-    "build": "rm -rfd build && tsc",
+    "build": "rm -rf build && tsc",
     "build:watch": "rm -rfd build && tsc -w",
     "prestart": "npm run build",
     "start": "node build/app.js",
