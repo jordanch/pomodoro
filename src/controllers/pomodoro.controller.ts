@@ -1,4 +1,4 @@
-import { Pomodoro, cache } from "../runtime"
+import { Pomodoro } from "../runtime"
 import {
   IPomoStartCtrl200,
   IPomoStateCtrl200,
