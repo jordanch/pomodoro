@@ -1,6 +1,4 @@
-import KoaRouter from "koa-router";
-
-const router = new KoaRouter();
+import KoaRouter from "koa-router"
 
 const info = `
 
@@ -21,8 +19,6 @@ GET /end stop a pt session
 
 `;
 
-router.get("/", (ctx) => {
-  ctx.body = info;
-});
-
-export const Auth = router;
+export function root(ctx: KoaRouter.IRouterContext) {
+    ctx.body = info
+}

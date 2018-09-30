@@ -1,5 +1,5 @@
 import Koa from "koa";
-import { PomodoroRoutes, Auth } from "./routes";
+import { PomodoroRoutes, Root } from "./routes";
 import { cache, MemoryDatabase } from "./runtime"
 
 const storage = new MemoryDatabase(cache)
@@ -10,6 +10,6 @@ const app: any = new Koa();
 app.context.storage = storage
 const PORT = 3000;
 
-app.use(Auth.routes()).use(PomodoroRoutes.routes());
+app.use(Root.routes()).use(PomodoroRoutes.routes());
 console.log(`Listening on port ${PORT}`)
 app.listen(PORT)

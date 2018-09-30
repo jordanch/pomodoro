@@ -1,2 +1,2 @@
 export * from './pomodoro.route';
-export * from './auth.route';
+export * from './root.route';
