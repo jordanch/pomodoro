@@ -1,4 +1,5 @@
-import KoaRouter from "koa-router"
+import { IRootController } from "../models"
+import { debug } from "."
 
 const info = `
 
@@ -17,8 +18,15 @@ GET /start start a pt session
 
 GET /end stop a pt session
 
-`;
+`
 
-export function root(ctx: KoaRouter.IRouterContext) {
-    ctx.body = info
+export function root(): IRootController {
+  const response = {
+    status: 200,
+    body: info
+  }
+
+  debug(response.status)
+
+  return response
 }

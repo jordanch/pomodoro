@@ -1,8 +1,17 @@
-import KoaRouter from "koa-router";
+import KoaRouter from "koa-router"
+import { router } from "../runtime/init"
 import { root } from "../controllers"
+import { responseCtx } from "../utils"
+import { debug } from "."
 
-const router = new KoaRouter();
+router.get("/", function(ctx: KoaRouter.IRouterContext) {
+  try {
+    responseCtx(root(), ctx, debug)
+  } catch (error) {
+    ctx.status = 500
 
-router.get("/", root);
+    responseCtx({ status: 500 }, ctx, debug)
+  }
+})
 
-export const Root = router;
+export const Root = router

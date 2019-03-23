@@ -1,14 +1,35 @@
 import diff from "date-fns/difference_in_milliseconds"
+import { IPomodoroSqlRecord } from "../../models"
 
 export class Pomodoro {
-  public running: boolean
+  static fromDB(record: IPomodoroSqlRecord) {
+    const { id, started_at, stopped_at } = record
+
+    return new Pomodoro({
+      id,
+      startedAt: new Date(started_at),
+      stoppedAt: stopped_at ? new Date(stopped_at) : undefined
+    })
+  }
+
   public id: number
+
   public startedAt: Date
-  public stoppedAt: Date | undefined
-  constructor(id: number, startedAt: Date = new Date()) {
+
+  public stoppedAt: Date | null
+
+  constructor({
+    id,
+    startedAt,
+    stoppedAt
+  }: {
+    id: number
+    startedAt: Date
+    stoppedAt?: Date
+  }) {
     this.id = id
     this.startedAt = startedAt
-    this.running = true
+    this.stoppedAt = stoppedAt || null
   }
 
   getElapsedMs() {
@@ -16,7 +37,16 @@ export class Pomodoro {
   }
 
   stop() {
-    this.stoppedAt = new Date()
-    this.running = false
+    if (!Boolean(this.stoppedAt)) {
+      this.stoppedAt = new Date()
+    }
+  }
+
+  toDB() {
+    return {
+      id: this.id,
+      started_at: this.startedAt,
+      stopped_at: this.stoppedAt
+    }
   }
 }

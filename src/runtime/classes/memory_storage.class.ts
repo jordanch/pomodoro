@@ -1,23 +1,41 @@
-import { IRuntimeCache, IStorage } from "../../models"
+import { IStorage } from "../../models"
 import { Pomodoro } from "."
 
-export class MemoryDatabase implements IStorage {
-  private cache: IRuntimeCache
+export class MemoryStorage implements IStorage {
+  private cache: {
+    sessions: {
+      byId: {
+        [id: number]: Pomodoro
+      }
+      allIds: number[]
+    }
+  }
 
-  constructor(cache: IRuntimeCache) {
-    this.cache = cache
+  constructor() {
+    this.cache = {
+      sessions: {
+        byId: {},
+        allIds: []
+      }
+    }
   }
 
   // TODO: type return
-  addPomodoro(pomodoro: Pomodoro, id: number): Promise<number> {
+  addPomodoro(pomodoro: Pomodoro): Promise<number> {
     return new Promise((resolve, reject) => {
+      const id = pomodoro.id
+
       try {
         this.cache.sessions.byId[id] = pomodoro
+
         this.cache.sessions.allIds.push(id)
+
         console.log(`Successfully added Pomodoro ID: ${id}`)
+
         resolve(id)
       } catch (e) {
         console.log(`Failed in adding Pomodoro ID: ${id}`)
+
         reject(e)
       }
     })
@@ -28,6 +46,7 @@ export class MemoryDatabase implements IStorage {
     return new Promise((resolve, reject) => {
       try {
         const pomodoro = this.cache.sessions.byId[id]
+
         resolve(pomodoro)
       } catch (e) {
         reject(e)
@@ -40,6 +59,7 @@ export class MemoryDatabase implements IStorage {
     return new Promise((resolve, reject) => {
       try {
         this.cache.sessions.byId[id] = pomodoro
+
         resolve(id)
       } catch (e) {
         reject(e)
@@ -50,23 +70,27 @@ export class MemoryDatabase implements IStorage {
   /**
    * Get the next pomodoro's id.
    */
-  getNextId():Promise<number | Error> {
+  getNextId(): Promise<number> {
     return new Promise((resolve, reject) => {
       try {
         const allIds = this.cache.sessions.allIds.slice()
-        const [lastId] = allIds.sort((a, b) => {
-          if (a < b) return -1
-          if (a > b) return 1
-          return 0
-        }).splice(-1)
-        const nextId = !lastId ? 1 : lastId + 1;
+
+        const [lastId] = allIds
+          .sort((a, b) => {
+            if (a < b) return -1
+            if (a > b) return 1
+            return 0
+          })
+          .splice(-1)
+
+        const nextId = !lastId ? 1 : lastId + 1
+
         console.log(`Last id ${lastId}, new pomodoro id ${nextId}`)
 
         resolve(nextId)
       } catch (e) {
         reject(e)
       }
-
     })
   }
 }

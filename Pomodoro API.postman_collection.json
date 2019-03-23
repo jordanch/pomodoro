@@ -9,7 +9,7 @@
 		{
 			"name": "Start session",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {},
 				"url": {
@@ -33,7 +33,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "localhost:3000/state?id=2",
+					"raw": "localhost:3000/state?id=5",
 					"host": [
 						"localhost"
 					],
@@ -44,7 +44,7 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "2"
+							"value": "5"
 						}
 					]
 				},
@@ -55,7 +55,7 @@
 		{
 			"name": "Stop",
 			"request": {
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
 				"body": {},
 				"url": {
@@ -76,6 +76,22 @@
 					]
 				},
 				"description": "Stop a pomodoro."
+			},
+			"response": []
+		},
+		{
+			"name": "/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:3000",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				}
 			},
 			"response": []
 		}

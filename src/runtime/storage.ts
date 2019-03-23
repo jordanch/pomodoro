@@ -1,4 +1,3 @@
-import { cache } from "./cache.runtime"
-import { MemoryDatabase }  from "./classes"
+import { MemoryStorage } from "./classes"
 
-export const storage = new MemoryDatabase(cache)
+export const storage = new MemoryStorage()

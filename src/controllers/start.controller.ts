@@ -1,26 +1,21 @@
-import { Pomodoro } from "../runtime";
-import { IStorage } from "../models";
 import KoaRouter from "koa-router"
+import { Pomodoro } from "../runtime"
+import { IStorage, IStartController } from "../models"
 
 /**
  * Start a pomodoro timer.
  */
-export async function start(ctx: KoaRouter.IRouterContext) {
-    // TODO: wrap in try catch and handle success and error.
-    try {
-        // @ts-ignore
-        const db = ctx.storage as IStorage;
-        const id = await db.getNextId()
-        const pomodoro = new Pomodoro(id)
-        await db.addPomodoro(pomodoro, id)
+export async function start(
+  ctx: KoaRouter.IRouterContext
+): Promise<IStartController> {
+  // @ts-ignore
+  const db = ctx.storage as IStorage
+  const id = await db.getNextId()
+  const pomodoro = new Pomodoro({ id, startedAt: new Date() })
+  await db.addPomodoro(pomodoro)
 
-        ctx.status = 200
-        ctx.body = id
-
-    } catch (e) {
-        console.error(e);
-
-        ctx.status = 500
-        ctx.body = 'Could not add Pomodoro!'
-    }
+  return {
+    status: 200,
+    body: id
   }
+}
